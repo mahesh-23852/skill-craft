@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Landing Page</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #333;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 1000;
+      transition: background 0.3s ease;
+    }
+
+    nav .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: white;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    nav ul li {
+      margin: 0 15px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: yellow;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      background: url("https://picsum.photos/1920/1080") no-repeat center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      padding-top: 60px; /* avoid nav overlap */
+    }
+
+    .hero h1 {
+      font-size: 50px;
+    }
+
+    /* Sections */
+    section {
+      height: 100vh;
+      padding: 50px;
+    }
+
+    #about { background: #f4f4f4; }
+    #services { background: #ddd; }
+    #contact { background: #bbb; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">MySite</div>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <div class="hero" id="home">
+    <h1>Welcome to My Landing Page</h1>
+  </div>
+
+  <!-- Sections -->
+  <section id="about"><h2>About Us</h2><p>This is the about section.</p></section>
+  <section id="services"><h2>Services</h2><p>These are our services.</p></section>
+  <section id="contact"><h2>Contact</h2><p>Contact us here.</p></section>
+
+  <!-- Scroll Effect Script -->
+  <script>
+    window.addEventListener("scroll", function() {
+      let navbar = document.querySelector("nav");
+      if (window.scrollY > 50) {
+        navbar.style.background = "#111"; // darker after scrolling
+      } else {
+        navbar.style.background = "#333"; // original at top
+      }
+    });
+  </script>
+</body>
+</html>
