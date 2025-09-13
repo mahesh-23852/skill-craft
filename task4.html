@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .app {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    form input,
+    form button {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    form input {
+      flex: 1;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 15px;
+      margin-bottom: 10px;
+      background: #e3e3e3;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    li.completed {
+      text-decoration: line-through;
+      background-color: #c8f7c5;
+    }
+
+    .task-info {
+      flex-grow: 1;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>📝 To-Do List</h1>
+
+    <form id="task-form">
+      <input type="text" id="task-title" placeholder="Task title" required>
+      <input type="date" id="task-date" required>
+      <input type="time" id="task-time" required>
+      <button type="submit">Add Task</button>
+    </form>
+
+    <ul id="task-list"></ul>
+  </div>
+
+  <script>
+    const taskForm = document.getElementById("task-form");
+    const taskList = document.getElementById("task-list");
+
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function saveTasks() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+      taskList.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.className = task.completed ? "completed" : "";
+
+        const taskInfo = document.createElement("div");
+        taskInfo.className = "task-info";
+        taskInfo.innerHTML = `<strong>${task.title}</strong><br>${task.date} ${task.time}`;
+
+        const buttons = document.createElement("div");
+        buttons.className = "buttons";
+
+        const completeBtn = document.createElement("button");
+        completeBtn.textContent = task.completed ? "Undo" : "Complete";
+        completeBtn.onclick = () => {
+          task.completed = !task.completed;
+          saveTasks();
+          renderTasks();
+        };
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.onclick = () => {
+          const newTitle = prompt("Edit task title:", task.title);
+          const newDate = prompt("Edit date:", task.date);
+          const newTime = prompt("Edit time:", task.time);
+          if (newTitle && newDate && newTime) {
+            task.title = newTitle;
+            task.date = newDate;
+            task.time = newTime;
+            saveTasks();
+            renderTasks();
+          }
+        };
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.onclick = () => {
+          tasks.splice(index, 1);
+          saveTasks();
+          renderTasks();
+        };
+
+        buttons.append(completeBtn, editBtn, deleteBtn);
+        li.append(taskInfo, buttons);
+        taskList.appendChild(li);
+      });
+    }
+
+    taskForm.onsubmit = (e) => {
+      e.preventDefault();
+      const title = document.getElementById("task-title").value.trim();
+      const date = document.getElementById("task-date").value;
+      const time = document.getElementById("task-time").value;
+
+      if (title && date && time) {
+        tasks.push({ title, date, time, completed: false });
+        saveTasks();
+        renderTasks();
+        taskForm.reset();
+      }
+    };
+
+    renderTasks();
+  </script>
+</body>
+</html>
